@@ -1,17 +1,30 @@
-import { useState } from "react";
 import "./App.css";
-import { ThemeContext } from "./context/themeContext";
+import { createContext, useEffect, useState } from "react";
+import Button from "./components/button";
+import Header from "./components/Header";
+
+export const ThemeContext = createContext();
 
 function App() {
-  const [theme, setTheme] = useState('dark');
-  
+  const [darkMode, SetDarkMode] = useState(false);
+
+  const toggleDark = () => {
+    SetDarkMode(!darkMode);
+  };
+
+  useEffect(() => {
+    const theme = darkMode ? "dark" : "light";
+    const body = document.querySelector("body");
+    body.classList.remove("dark", "light");
+    body.classList.toggle(theme);
+    body.style.cssText = "transition: background .5s ease";
+  }, [darkMode]);
+
   return (
-    <ThemeContext.Provider value={theme}>
-      <h1>Theme Switch Context Api</h1>
+    <ThemeContext.Provider value={{ darkMode, toggleDark }}>
+      <Header />
       <div className="card">
-        <button>
-          Change Theme
-        </button>
+        <Button />
       </div>
     </ThemeContext.Provider>
   );
