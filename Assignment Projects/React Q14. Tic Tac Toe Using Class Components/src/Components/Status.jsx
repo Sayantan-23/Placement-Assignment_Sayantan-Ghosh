@@ -1,4 +1,5 @@
-import React, { Component } from "react";
+/* eslint-disable react/prop-types */
+import { Component } from "react";
 import Player from "./choosePlayer";
 
 class Status extends Component {
