@@ -118,7 +118,7 @@ It is useful to set box-sizing to border-box for all the elements. It helps us d
 
 <u>*Answer -*</u> Z-index property controls the stacking order of positioned elements and determines how the elements are layered and displayed on top or behind one another on a web page. The character Z came from the three dimensional representation where x stands for width, y stands for height and z stands for depth.
 
-	The z-index property accepts an integer value that specifies the stacking order of an element. Higher values result in elements appearing on top of other lower valued elements. By default z-index value is auto, we can give it any positive or negative integer value according to our need. Each positioned element with a z-index value other than auto creates a stacking context. A stacking context is a hierarchical structure that determines the order in which elements are stacked. Z-index only affects the elements with a positioned value other than static (like relative, absolute, fixed or sticky).
+The z-index property accepts an integer value that specifies the stacking order of an element. Higher values result in elements appearing on top of other lower valued elements. By default z-index value is auto, we can give it any positive or negative integer value according to our need. Each positioned element with a z-index value other than auto creates a stacking context. A stacking context is a hierarchical structure that determines the order in which elements are stacked. Z-index only affects the elements with a positioned value other than static (like relative, absolute, fixed or sticky).
 
 
 **Q.6 What’s Grid & Flex and difference between them?**
@@ -139,13 +139,13 @@ Flex is relatively simpler to understand and implement whereas grid is a little 
 <u>*Answer -*</u> Relative, absolute, fixed and sticky are the values of CSS position property, which defines how the element is positioned in the web page.By default the position property is set to static. We can set different values of position property other than static and then manipulate them by using the top, right, bottom and left property. In static positioning the top, right, bottom, left and z-index will not have any effect on the element.
 Relative - It is just like static value where the element will be positioned according to the flow of the document, but now top, right, bottom, left and z-index will have effect on the element. These properties will work on the element based on its original position. These properties and the values will not affect the positions of other elements and the space given for the relative element in the page layout will be the same as if the position was static. For example let’s take the code - 
 ```css
-	item {
-		position: relative;
-		top: 60px;
-		left: 60px;
-	}
-  ```
-	Here the given space for the item in the page will be the same as if it was for static but we will see the item moved to 60 pixels from top and 60 from left than its original position.
+item {
+  position: relative;
+  top: 60px;
+  left: 60px;
+}
+```
+Here the given space for the item in the page will be the same as if it was for static but we will see the item moved to 60 pixels from top and 60 from left than its original position.
 Absolute - Unlike the static and relative this time the element will be removed from the original document flow and there will be no space created for the document in the page layout.That means if the child element has an absolute value then the parent will behave as if the child is not there at all. The values of top, right, bottom and left will be calculated with respect to the entire document. Only if we make the parent container’s position relative then the absolute child’s top, right, bottom and left values will be calculated with respect to the parent container. For example - 
 ```css
 item {
@@ -236,7 +236,7 @@ Variables that are declared using let or const can not be accessed before initia
 
 <u>*Answer -*</u> In JavaScript Higher order functions are the functions which accepts a function as an argument or returns a function. Examples of higher order functions are .map(), .filter(), .forEach(), setTimeOut() etc.
 
-	Difference Between .map() and .forEach() - Both .map() and .forEach() are available for arrays in JavaScript. Both are higher order functions and both takes a callback function as an argument. But they both serve different purposes - 
+Difference Between .map() and .forEach() - Both .map() and .forEach() are available for arrays in JavaScript. Both are higher order functions and both takes a callback function as an argument. But they both serve different purposes - 
 
 .forEach() - forEach() iterates over each element of the array and executes the provided function once for each array element in ascending-index order. Unlike map(), the forEach() function always returns undefined. forEach() does not mutate the array on which it is called but the callback function inside the forEach() method can mutate the original array. Example of forEach() - 
 ```javascript
@@ -245,11 +245,13 @@ Variables that are declared using let or const can not be accessed before initia
 3.	numbers.forEach((num) => {
 4.	console.log(num);
 5.	});
+
+// Output: 
+//       1
+//       2
+//       3
+//       4
 ```
-		Output: 1
-			    2
-			    3
-			    4
 .map() - map() iterates over each element of the array and performs the operation given in the callback function of map() once for each array element and then it returns a new array populated with the results. The new array elements are transformed from the original array based on the logic given in the callback function. Example -
 ```javascript 
 1. 	const numbers = [1, 2, 3, 4];
@@ -270,7 +272,7 @@ Output: [2,4,6,8]
 .apply() - The .apply() method is similar to .call(), but it accepts arguments as an array or array-like object. It is particularly useful when the number of arguments is not known in advance or when the arguments are already available in an array.
 		Here is the example of .call() and .apply() with code- 
 ```javascript
-		const person = {
+	const person = {
   name: 'Sayantan',
   greet: function(message) {
     console.log(`${message}, ${this.name}!`);
