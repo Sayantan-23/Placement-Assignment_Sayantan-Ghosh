@@ -3,6 +3,7 @@ import validator from "validator";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import "dotenv/config";
+import crypto from "crypto";
 
 const userSchema = new mongoose.Schema({
   name: {
@@ -62,6 +63,22 @@ userSchema.methods.getJWTToken = function () {
 // Compare password entered by user with the hashed password in the database
 userSchema.methods.comparePassword = async function (password) {
   return await bcrypt.compare(password, this.password);
+};
+
+// Generating Password Reset Token
+userSchema.methods.getResetPasswordToken = function () {
+  // Generating Token
+  const resetToken = crypto.randomBytes(20).toString("hex");
+
+  // Hashing and adding resetToken to userSchema
+  this.resetPasswordToken = crypto
+    .createHash("sha256")
+    .update(resetToken)
+    .digest("hex");
+
+  this.resetPasswordExpire = Date.now() + 15 * 60 * 1000;
+
+  return resetToken;
 };
 
 export default mongoose.model("User", userSchema);
