@@ -5,6 +5,7 @@ import {
   updateProduct,
   deleteProduct,
   getProductDetails,
+  createProductReview,
 } from "../controllers/productController.js";
 import { authorizeRoles, isAuthenticatedUser } from "../middlewares/auth.js";
 
@@ -13,26 +14,28 @@ const router = express.Router();
 router.get("/products", getAllProducts);
 
 router.post(
-  "/product/new",
+  "/admin/product/new",
   isAuthenticatedUser,
   authorizeRoles("admin"),
   createProduct
 );
 
 router.put(
-  "/product/:id",
+  "/admin/product/:id",
   isAuthenticatedUser,
   authorizeRoles("admin"),
   updateProduct
 );
 
 router.delete(
-  "/product/:id",
+  "/admin/product/:id",
   isAuthenticatedUser,
   authorizeRoles("admin"),
   deleteProduct
 );
 
 router.get("/product/:id", getProductDetails);
+
+router.put("/review", isAuthenticatedUser, createProductReview);
 
 export default router;

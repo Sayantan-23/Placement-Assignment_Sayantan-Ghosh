@@ -5,8 +5,7 @@ import ApiFeatures from "../utils/apiFeatures.js";
 
 // Create Product -- Admin
 export const createProduct = catchAsyncError(async (req, res, next) => {
-
-  req.body.user = req.user.id
+  req.body.user = req.user.id;
 
   const product = await Product.create(req.body);
 
@@ -19,7 +18,7 @@ export const createProduct = catchAsyncError(async (req, res, next) => {
 // Get All Products
 export const getAllProducts = catchAsyncError(async (req, res) => {
   const resultPerPage = 5;
-  const productCount = await Product.countDocuments()
+  const productCount = await Product.countDocuments();
 
   const apiFeature = new ApiFeatures(Product.find(), req.query)
     .search()
@@ -30,7 +29,7 @@ export const getAllProducts = catchAsyncError(async (req, res) => {
   res.status(200).json({
     success: true,
     products,
-    productCount
+    productCount,
   });
 });
 
@@ -81,5 +80,49 @@ export const deleteProduct = catchAsyncError(async (req, res, next) => {
   res.status(200).json({
     success: true,
     message: "Product Deleted Successfully",
+  });
+});
+
+// Create New Review or Update Review
+export const createProductReview = catchAsyncError(async (req, res, next) => {
+  const { rating, comment, productId } = req.body;
+
+  const review = {
+    user: req.user._id,
+    name: req.user.name,
+    rating: Number(rating),
+    comment,
+  };
+  const product = await Product.findById(productId);
+
+  if (!product) return next(new ErrorHandler("Product not found", 404));
+
+  const isReviewed = product.reviews.find(
+    (rev) => rev.user.toString() === req.user._id.toString()
+  );
+  
+  if (isReviewed) {
+    product.reviews.forEach((review) => {
+      if (review.user.toString() === req.user._id) {
+        review.rating = rating;
+        review.comment = comment;
+      }
+    });
+  } else {
+    product.reviews.push(review);
+    product.numOfReviews = product.reviews.length;
+  }
+
+  let totalRating = 0;
+  product.ratings = product.reviews.forEach((review) => {
+    totalRating += review.rating;
+  });
+
+  product.ratings = totalRating / product.reviews.length;
+
+  await product.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    success: true,
   });
 });
