@@ -100,7 +100,7 @@ export const createProductReview = catchAsyncError(async (req, res, next) => {
   const isReviewed = product.reviews.find(
     (rev) => rev.user.toString() === req.user._id.toString()
   );
-  
+
   if (isReviewed) {
     product.reviews.forEach((review) => {
       if (review.user.toString() === req.user._id) {
@@ -114,13 +114,68 @@ export const createProductReview = catchAsyncError(async (req, res, next) => {
   }
 
   let totalRating = 0;
-  product.ratings = product.reviews.forEach((review) => {
+  product.reviews.forEach((review) => {
     totalRating += review.rating;
   });
 
   product.ratings = totalRating / product.reviews.length;
 
   await product.save({ validateBeforeSave: false });
+
+  res.status(200).json({
+    success: true,
+  });
+});
+
+// Get All Reviews of A Single Product
+export const getProductReviews = catchAsyncError(async (req, res, next) => {
+  const product = await Product.findById(req.query.id);
+
+  if (!product) return next(new ErrorHandler("Product not found", 404));
+
+  res.status(200).json({
+    success: true,
+    reviews: product.reviews,
+  });
+});
+
+// Delete Review
+export const deleteReview = catchAsyncError(async (req, res, next) => {
+  const product = await Product.findById(req.query.productId);
+
+  if (!product) return next(new ErrorHandler("Product not found", 404));
+
+  const reviews = product.reviews.filter(
+    (review) => review._id.toString() !== req.query.id.toString()
+  );
+
+  let totalRating = 0;
+  reviews.forEach((review) => {
+    totalRating += review.rating;
+  });
+
+  const numOfReviews = reviews.length;
+
+  let ratings = 0;
+
+  if (numOfReviews === 0) {
+    ratings = 0;
+  } else {
+    ratings = totalRating / numOfReviews;
+  }
+
+  await Product.findByIdAndUpdate(
+    req.query.productId,
+    {
+      reviews,
+      ratings,
+      numOfReviews,
+    },
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   res.status(200).json({
     success: true,
